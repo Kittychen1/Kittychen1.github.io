@@ -28,10 +28,8 @@ params:
 
   # ---------- 侧边栏信息（增强） ----------
   sidebar:
-    subtitle: "探索 AI · 分享成长"   # 更生动的一句话简介
-    avatar:
-      enabled: true
-      src: img/avatar.png           # 如果有头像图片就放这里
+    subtitle: "探索 AI · 分享成长"
+    avatar: img/avatar.png
 
   # ---------- 文章显示设置 ----------
   article:
