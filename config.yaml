@@ -1,7 +1,8 @@
 # ↓↓↓ 上线后必须改成你的真实地址！本地预览阶段先保持这样也行 ↓↓↓
 baseURL: "https://Kittychen1.github.io/"
+defaultContentLanguage: "zh"
 languageCode: "zh-cn"
-locale: "zh-cn"
+locale: "zh_CN"
 theme: "hugo-theme-stack"
 title: "Kittychen1-1"
 copyright: "© 2026 Kittychen"
