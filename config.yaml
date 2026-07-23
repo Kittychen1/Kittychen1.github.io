@@ -12,10 +12,12 @@ pagination:
 
 # Stack 主题的核心配置
 params:
+  colorScheme:
+    default: auto  
   mainSections:
     - post                     # 首页展示 content/post 目录下的文章
   params:
-  colorScheme: amber   # 可选值: auto, light, dark, 或具体主题名
+ 
   # 左侧个人信息卡片
   sidebar:
     subtitle: "记录、分享、成长"   # 头像下的一句话简介
