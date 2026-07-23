@@ -1,56 +1,103 @@
 # ↓↓↓ 上线后必须改成你的真实地址！本地预览阶段先保持这样也行 ↓↓↓
 baseURL: "https://Kittychen1.github.io/"
 languageCode: "zh-cn"
-locale: "zh-cn"                # Hugo v0.158+ 用 locale，不加会有 languageCode 弃用警告（仅警告，不影响运行）
+locale: "zh-cn"
 theme: "hugo-theme-stack"
-title: "Kittychen1-1"          # 网站标题，改成你的
-copyright: "© 2026 Kittychen"   # 底部版权
+title: "Kittychen1-1"
+copyright: "© 2026 Kittychen"
 
 # 分页：每页显示几篇文章
 pagination:
-  pagerSize: 5
+  pagerSize: 6
 
-# Stack 主题的核心配置
+# ============================================
+# Stack 主题的核心配置（增强美观版）
+# ============================================
 params:
-  # ===== 配色方案（修正） =====
+  # ---------- 配色方案 ----------
   colorScheme:
-    default: auto              # auto / light / dark
-    toggle: true               # ✅ 加上这行，右上角显示切换按钮
+    default: auto
+    toggle: true
 
-  # ===== 内容设置 =====
+  # ---------- 内容设置 ----------
   mainSections:
-    - post                     # 首页展示 content/post 目录下的文章
+    - post
+  featuredImageField: image
+  rssFullContent: true
+  favicon: ""
 
-  # ===== 左侧个人信息卡片 =====
+  # ---------- 侧边栏信息（增强） ----------
   sidebar:
-    subtitle: "记录、分享、成长"   # 头像下的一句话简介
-    avatar: img/avatar.png       # 头像：直接写 
-                                 # （不想用头像就删掉这一行）
+    subtitle: "探索 AI · 分享成长"   # 更生动的一句话简介
+    avatar:
+      enabled: true
+      src: img/avatar.png           # 如果有头像图片就放这里
 
-  # ===== 文章设置 =====
+  # ---------- 文章显示设置 ----------
   article:
     math: false
-    toc: true                    # 文章内显示目录
+    toc: true
+    readingTime: true               # 显示预计阅读时间
+    showDate: true                  # 显示文章日期
+    showEdit: false
+    showAuthor: true
 
-  # ===== 评论：先关掉 =====
+  # ---------- 首页布局 ----------
+  home:
+    showPageTitle: true
+    showFeaturedImage: true
+    showSummary: true               # 在首页显示文章摘要
+
+  # ---------- 评论（先关掉） ----------
   comments:
     enabled: false
 
-# 顶部/侧边菜单
+  # ---------- 页脚自定义 ----------
+  footer:
+    since: 2026                     # 显示网站起始年份
+    customText: "用 ❤️ 和 Hugo 构建"
+
+# ============================================
+# 菜单设置（增强导航体验）
+# ============================================
 menu:
-  social:                        # 社交链接（显示在个人卡片下）
+  # 主菜单（显示在顶部导航栏）
+  main:
+    - name: "🏠 首页"
+      url: "/"
+      weight: 1
+    - name: "📝 归档"
+      url: "/archives/"
+      weight: 2
+    - name: "🏷️ 标签"
+      url: "/tags/"
+      weight: 3
+    - name: "📂 分类"
+      url: "/categories/"
+      weight: 4
+    - name: "ℹ️ 关于"
+      url: "/about/"
+      weight: 5
+
+  # 社交链接（显示在侧边栏）
+  social:
     - identifier: github
       name: GitHub
       url: "https://github.com/Kittychen1"
       params:
         icon: brand-github
-           
-  main: []                       # 主菜单，先留空
+    - identifier: email
+      name: 邮箱
+      url: "mailto:1142644879@qq.com"
+      params:
+        icon: mail
 
-# 让文章摘要、代码高亮等更好看
+# ============================================
+# 文章格式与代码高亮
+# ============================================
 markup:
   goldmark:
     renderer:
-      unsafe: true               # 允许 Markdown 里写 HTML
+      unsafe: true
   highlight:
     noClasses: false
