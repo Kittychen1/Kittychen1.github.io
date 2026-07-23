@@ -84,11 +84,6 @@ menu:
       url: "https://github.com/Kittychen1"
       params:
         icon: brand-github
-    - identifier: email
-      name: 邮箱
-      url: "mailto:1142644879@qq.com"
-      params:
-        icon: mail
 
 # ============================================
 # 文章格式与代码高亮
