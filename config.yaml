@@ -12,24 +12,27 @@ pagination:
 
 # Stack 主题的核心配置
 params:
+  # ===== 配色方案（修正） =====
   colorScheme:
-    default: auto  
+    default: auto              # auto / light / dark
+    toggle: true               # ✅ 加上这行，右上角显示切换按钮
+
+  # ===== 内容设置 =====
   mainSections:
     - post                     # 首页展示 content/post 目录下的文章
-  params:
- 
-  # 左侧个人信息卡片
+
+  # ===== 左侧个人信息卡片 =====
   sidebar:
     subtitle: "记录、分享、成长"   # 头像下的一句话简介
     avatar: img/avatar.png       # 头像：直接写 
                                  # （不想用头像就删掉这一行）
 
-  # 文章封面等图片处理
+  # ===== 文章设置 =====
   article:
     math: false
     toc: true                    # 文章内显示目录
 
-  # 评论：先关掉，玩熟了再看第十一节接入 giscus
+  # ===== 评论：先关掉 =====
   comments:
     enabled: false
 
