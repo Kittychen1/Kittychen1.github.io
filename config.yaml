@@ -56,6 +56,23 @@ params:
     since: 2026                     # 显示网站起始年份
     customText: "用 ❤️ 和 Hugo 构建"
 
+  # ---------- 侧边栏组件（widget） ----------
+  widgets:
+    # 首页 / 列表页右侧栏
+    homepage:
+      - type: categories
+        params:
+          limit: 20
+      - type: tag-cloud
+        params:
+          limit: 20
+      - type: archives
+        params:
+          limit: 5
+    # 文章详情页右侧栏
+    page:
+      - type: toc
+
 # ============================================
 # 菜单设置（增强导航体验）
 # ============================================

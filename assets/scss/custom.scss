@@ -5,3 +5,74 @@
     --accent-color: #1976d2;
     --accent-color-darker: #1565c0;
 }
+
+/* ===== 分类页网格卡片 ===== */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--section-separation);
+}
+
+.category-card {
+    @include card-style;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--small-card-padding);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: var(--card-text-color-main);
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-l2);
+    }
+
+    &__icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(25, 118, 210, 0.1);
+        border-radius: 10px;
+    }
+
+    &__body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1.8rem;
+        color: var(--card-text-color-main);
+    }
+
+    &__desc {
+        margin: 4px 0 0;
+        font-size: 1.3rem;
+        color: var(--card-text-color-secondary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__badge {
+        flex-shrink: 0;
+        min-width: 28px;
+        height: 28px;
+        padding: 0 8px;
+        border-radius: 14px;
+        background: var(--accent-color);
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
