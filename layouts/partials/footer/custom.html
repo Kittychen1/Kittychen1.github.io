@@ -1,0 +1,69 @@
+{{/* === Toast 组件集成：仅在文章页（post section 单页）注入，不影响其他页面 === */}}
+{{ if and (eq .Section "post") (eq .Kind "page") }}
+<link rel="stylesheet" href="/toast/toast.css">
+<script src="/toast/toast.js" defer></script>
+<script>
+(function () {
+    function init() {
+        if (!window.Toast || !document.body.classList.contains('article-page')) return;
+
+        // 1) 代码块复制 → 成功提示（与主题 code-copy 联动，capture 阶段先于主题执行）
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest && e.target.closest('.copyCodeButton');
+            if (!btn) return;
+            var code = btn.parentElement && btn.parentElement.querySelector('code[data-lang]');
+            if (!code) return;
+            navigator.clipboard.writeText(code.textContent)
+                .then(function () { Toast.success('代码已复制'); })
+                .catch(function () { Toast.error('复制失败，请手动选择复制'); });
+        }, true);
+
+        // 2) 文章底部实际场景入口：复制链接 / 稍后阅读 / 模拟错误
+        var content = document.querySelector('.article-content');
+        if (content && !document.querySelector('.toast-action-bar')) {
+            var bar = document.createElement('div');
+            bar.className = 'toast-action-bar';
+            bar.innerHTML =
+                '<button type="button" class="toast-action-btn" data-act="link">🔗 复制本文链接</button>' +
+                '<button type="button" class="toast-action-btn" data-act="warn">⏰ 稍后阅读</button>' +
+                '<button type="button" class="toast-action-btn" data-act="err">⚠ 模拟操作失败</button>';
+            content.after(bar);
+            bar.addEventListener('click', function (e) {
+                var b = e.target.closest('.toast-action-btn');
+                if (!b) return;
+                var act = b.getAttribute('data-act');
+                if (act === 'link') {
+                    navigator.clipboard.writeText(location.href)
+                        .then(function () { Toast.success('本文链接已复制'); })
+                        .catch(function () { Toast.error('复制链接失败'); });
+                } else if (act === 'warn') {
+                    Toast.warning('已加入稍后阅读，记得回来看完哦～');
+                } else if (act === 'err') {
+                    Toast.error('操作未能完成（错误码 DEMO_500），请稍后重试');
+                }
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    // 兜底：toast.js(defer) 尚未就绪时轮询
+    if (!window.Toast) {
+        var t = setInterval(function () { if (window.Toast) { clearInterval(t); init(); } }, 50);
+        setTimeout(function () { clearInterval(t); }, 4000);
+    }
+})();
+</script>
+<style>
+.toast-action-bar { max-width: 720px; margin: 24px 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.toast-action-btn {
+    font-family: inherit; font-size: 14px; padding: 8px 14px;
+    border: 1px solid #e5e7eb; background: #fff; color: #374151;
+    border-radius: 8px; cursor: pointer; transition: background .15s, border-color .15s;
+}
+.toast-action-btn:hover { background: #f9fafb; border-color: #d1d5db; }
+</style>
+{{ end }}

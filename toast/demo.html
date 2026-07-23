@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast 组件演示</title>
+    <link rel="stylesheet" href="toast.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 40px 20px;
+            color: #1f2937;
+        }
+        .container { max-width: 720px; margin: 0 auto; }
+        h1 { font-size: 22px; margin: 0 0 8px; }
+        .desc { color: #6b7280; font-size: 14px; margin: 0 0 28px; }
+        .group { margin-bottom: 28px; }
+        .group-title { font-size: 15px; font-weight: 600; margin: 0 0 12px; color: #374151; }
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+        button.demo-btn {
+            font-family: inherit;
+            font-size: 14px;
+            padding: 9px 16px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #fff;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+        button.demo-btn:hover { opacity: 0.9; }
+        button.demo-btn:active { transform: translateY(1px); }
+        .btn-success { background: #22c55e; }
+        .btn-error   { background: #ef4444; }
+        .btn-warning { background: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Toast 消息提示弹窗</h1>
+        <p class="desc">干净轻量 · 白色圆角 · 淡黑色遮罩 · 3 秒自动消失 · 支持手动关闭</p>
+
+        <div class="group">
+            <p class="group-title">短文本</p>
+            <div class="btn-row">
+                <button class="demo-btn btn-success" onclick="Toast.success('保存成功')">成功</button>
+                <button class="demo-btn btn-error" onclick="Toast.error('删除失败')">错误</button>
+                <button class="demo-btn btn-warning" onclick="Toast.warning('存储空间不足')">警告</button>
+            </div>
+        </div>
+
+        <div class="group">
+            <p class="group-title">长文本（验证换行与最大宽度）</p>
+            <div class="btn-row">
+                <button class="demo-btn btn-success" onclick="Toast.success('您的文章已成功发布，目前正在生成静态页面，稍后即可在前台查看完整内容。')">成功（长文本）</button>
+                <button class="demo-btn btn-error" onclick="Toast.error('提交失败：服务器连接超时，请检查网络后重试。如果问题持续存在，请联系管理员并提供错误代码 ERR_TIMEOUT_504。')">错误（长文本）</button>
+                <button class="demo-btn btn-warning" onclick="Toast.warning('您的浏览器版本过低，部分功能可能无法正常使用。建议升级到最新版本以获得最佳体验。')">警告（长文本）</button>
+            </div>
+        </div>
+
+        <div class="group">
+            <p class="group-title">自定义时长</p>
+            <div class="btn-row">
+                <button class="demo-btn btn-success" onclick="Toast.success('这条提示会显示 5 秒', 5000)">5 秒后消失</button>
+                <button class="demo-btn btn-error" onclick="Toast.error('这条不会自动消失，请手动关闭', 0)">不自动关闭</button>
+            </div>
+        </div>
+    </div>
+    <script src="toast.js"></script>
+</body>
+</html>
