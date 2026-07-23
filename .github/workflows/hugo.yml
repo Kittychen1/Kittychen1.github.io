@@ -2,16 +2,14 @@ name: Deploy Hugo site to Pages
 
 on:
   push:
-    branches: ["main"]        # 推送到 main 分支就触发
-  workflow_dispatch:          # 也允许手动触发
+    branches: ["main"]
+  workflow_dispatch:
 
-# 授予 Actions 发布到 Pages 的权限
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 同一时间只跑一个部署，避免冲突
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -20,28 +18,44 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.164.0  # 建议填成你本地 hugo version 看到的版本号
+      HUGO_VERSION: 0.164.0
     steps:
-      - name: Install Hugo CLI (extended)
+      - name: Install Hugo CLI
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
-      - name: Checkout
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+          sudo dpkg -i ${{ runner.temp }}/hugo.deb
+
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          submodules: recursive   # ★ 必须：把主题子模块也拉下来
+          submodules: recursive
           fetch-depth: 0
+
+      - name: Verify submodules
+        run: |
+          git submodule update --init --recursive
+          ls -la themes/hugo-theme-stack/
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
         run: |
+          echo "Base URL: ${{ steps.pages.outputs.base_url }}/"
+          hugo version
           hugo \
             --gc \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Verify build
+        run: |
+          ls -la public/
+          test -f public/index.html || exit 1
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
