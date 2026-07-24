@@ -1,13 +1,51 @@
-{{/* === Toast 组件集成：仅在文章页（post section 单页）注入，不影响其他页面 === */}}
+{{/* === CSDN 风格增强：阅读进度条 + 作者卡片 + Toast 集成 === */}}
 {{ if and (eq .Section "post") (eq .Kind "page") }}
+
+{{/* 1. 顶部阅读进度条 */}}
+<div class="csdn-progress-bar" id="csdn-progress-bar"></div>
+
+{{/* 2. Toast 样式 */}}
 <link rel="stylesheet" href="/toast/toast.css">
 <script src="/toast/toast.js" defer></script>
+
+{{/* 3. 文章底部 CSDN 作者卡片 */}}
+<div class="csdn-author-card">
+    <div class="csdn-avatar">
+        <img src="/img/avatar.jpg" alt="作者头像">
+    </div>
+    <div class="csdn-author-info">
+        <h3 class="csdn-author-name">{{ .Site.Title }}</h3>
+        <p class="csdn-author-desc">{{ .Site.Params.sidebar.subtitle }}</p>
+    </div>
+    <button class="csdn-follow-btn" onclick="navigator.clipboard.writeText(location.href)">关注</button>
+</div>
+
+{{/* 4. Toast 操作按钮栏 */}}
+<div class="toast-action-bar">
+    <button type="button" class="toast-action-btn" data-act="link">🔗 复制本文链接</button>
+    <button type="button" class="toast-action-btn" data-act="top">⬆ 回到顶部</button>
+    <button type="button" class="toast-action-btn" data-act="share">📤 分享文章</button>
+</div>
+
+{{/* 5. 所有交互逻辑 */}}
 <script>
 (function () {
-    function init() {
-        if (!window.Toast || !document.body.classList.contains('article-page')) return;
+    var progressBar = document.getElementById('csdn-progress-bar');
 
-        // 1) 代码块复制 → 成功提示（与主题 code-copy 联动，capture 阶段先于主题执行）
+    function init() {
+        // 5.1 阅读进度条
+        if (progressBar) {
+            function updateProgress() {
+                var scrollTop = window.scrollY || document.documentElement.scrollTop;
+                var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                var percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                progressBar.style.width = percent + '%';
+            }
+            window.addEventListener('scroll', updateProgress, { passive: true });
+            updateProgress();
+        }
+
+        // 5.2 Toast 交互 - 代码复制
         document.addEventListener('click', function (e) {
             var btn = e.target.closest && e.target.closest('.copyCodeButton');
             if (!btn) return;
@@ -18,16 +56,9 @@
                 .catch(function () { Toast.error('复制失败，请手动选择复制'); });
         }, true);
 
-        // 2) 文章底部实际场景入口：复制链接 / 稍后阅读 / 模拟错误
-        var content = document.querySelector('.article-content');
-        if (content && !document.querySelector('.toast-action-bar')) {
-            var bar = document.createElement('div');
-            bar.className = 'toast-action-bar';
-            bar.innerHTML =
-                '<button type="button" class="toast-action-btn" data-act="link">🔗 复制本文链接</button>' +
-                '<button type="button" class="toast-action-btn" data-act="warn">⏰ 稍后阅读</button>' +
-                '<button type="button" class="toast-action-btn" data-act="err">⚠ 模拟操作失败</button>';
-            content.after(bar);
+        // 5.3 底部按钮点击
+        var bar = document.querySelector('.toast-action-bar');
+        if (bar) {
             bar.addEventListener('click', function (e) {
                 var b = e.target.closest('.toast-action-btn');
                 if (!b) return;
@@ -36,11 +67,28 @@
                     navigator.clipboard.writeText(location.href)
                         .then(function () { Toast.success('本文链接已复制'); })
                         .catch(function () { Toast.error('复制链接失败'); });
-                } else if (act === 'warn') {
-                    Toast.warning('已加入稍后阅读，记得回来看完哦～');
-                } else if (act === 'err') {
-                    Toast.error('操作未能完成（错误码 DEMO_500），请稍后重试');
+                } else if (act === 'top') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    Toast.success('已回到顶部');
+                } else if (act === 'share') {
+                    var url = location.href;
+                    var title = document.title;
+                    if (navigator.share) {
+                        navigator.share({ title: title, url: url }).catch(function () {});
+                    } else {
+                        navigator.clipboard.writeText(url)
+                            .then(function () { Toast.success('分享链接已复制'); })
+                            .catch(function () { Toast.error('分享失败'); });
+                    }
                 }
+            });
+        }
+
+        // 5.4 关注按钮
+        var followBtn = document.querySelector('.csdn-follow-btn');
+        if (followBtn) {
+            followBtn.addEventListener('click', function () {
+                Toast.success('感谢关注 ❤️');
             });
         }
     }
@@ -50,20 +98,11 @@
     } else {
         init();
     }
-    // 兜底：toast.js(defer) 尚未就绪时轮询
     if (!window.Toast) {
         var t = setInterval(function () { if (window.Toast) { clearInterval(t); init(); } }, 50);
         setTimeout(function () { clearInterval(t); }, 4000);
     }
 })();
 </script>
-<style>
-.toast-action-bar { max-width: 720px; margin: 24px 0; display: flex; flex-wrap: wrap; gap: 10px; }
-.toast-action-btn {
-    font-family: inherit; font-size: 14px; padding: 8px 14px;
-    border: 1px solid #e5e7eb; background: #fff; color: #374151;
-    border-radius: 8px; cursor: pointer; transition: background .15s, border-color .15s;
-}
-.toast-action-btn:hover { background: #f9fafb; border-color: #d1d5db; }
-</style>
+
 {{ end }}

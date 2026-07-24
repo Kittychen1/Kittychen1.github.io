@@ -1,12 +1,417 @@
-/* 自定义样式 - 淡蓝色天蓝色背景 */
+/* ================================================
+   CSDN 风格自定义样式
+   设计原则：简约、专业、无额外依赖
+   ================================================ */
+
 :root {
-    --body-background: #e3f2fd;
+    /* 主题变量 - CSDN 风格 */
+    --body-background: #f5f6f7;
     --card-background: #ffffff;
-    --accent-color: #1976d2;
-    --accent-color-darker: #1565c0;
+    --csdn-primary: #fc5531;
+    --csdn-primary-hover: #e04a2b;
+    --csdn-text: #333333;
+    --csdn-text-secondary: #666666;
+    --csdn-border: #ebeef5;
+    --csdn-code-bg: #f6f8fa;
+    --csdn-quote-bg: #f7f7f7;
+    --csdn-meta-bg: #fafbfc;
+    --csdn-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    --csdn-radius: 6px;
+    --csdn-radius-lg: 10px;
 }
 
-/* ===== 分类页网格卡片 ===== */
+/* ===== 顶部阅读进度条 ===== */
+.csdn-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--csdn-primary);
+    z-index: 9999;
+    width: 0;
+    transition: width 0.1s linear;
+    box-shadow: 0 1px 6px rgba(252, 85, 49, 0.3);
+}
+
+/* ===== 文章内容区 - CSDN 风格 ===== */
+.article-content {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--csdn-text);
+    letter-spacing: 0.3px;
+    word-spacing: 0.5px;
+
+    /* 段落间距 */
+    p {
+        margin: 0 0 18px;
+        text-align: justify;
+    }
+
+    /* 标题样式 - CSDN 风格 */
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 600;
+        margin-top: 2em;
+        margin-bottom: 1em;
+        line-height: 1.35;
+        color: var(--csdn-text);
+        position: relative;
+    }
+
+    h1 {
+        font-size: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--csdn-border);
+        margin-top: 0;
+    }
+
+    h2 {
+        font-size: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--csdn-border);
+    }
+
+    h3 {
+        font-size: 17px;
+        padding-left: 12px;
+        border-left: 3px solid var(--csdn-primary);
+        background: linear-gradient(to right, rgba(252, 85, 49, 0.05), transparent);
+        padding-top: 6px;
+        padding-bottom: 6px;
+        border-radius: 0 var(--csdn-radius) var(--csdn-radius) 0;
+    }
+
+    h4 {
+        font-size: 16px;
+        padding-left: 10px;
+        border-left: 2px solid var(--csdn-primary);
+    }
+
+    h5, h6 {
+        font-size: 15px;
+        color: var(--csdn-text-secondary);
+    }
+
+    /* 列表样式 */
+    ul, ol {
+        padding-left: 24px;
+        margin: 0 0 18px;
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.75;
+
+            &::marker {
+                color: var(--csdn-primary);
+            }
+        }
+    }
+
+    ul {
+        li::marker {
+            color: var(--csdn-primary);
+        }
+    }
+
+    ol {
+        li::marker {
+            color: var(--csdn-primary);
+            font-weight: 600;
+        }
+    }
+
+    /* 链接样式 */
+    a {
+        color: var(--csdn-primary);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(252, 85, 49, 0.3);
+        transition: color 0.2s, border-color 0.2s;
+
+        &:hover {
+            color: var(--csdn-primary-hover);
+            border-bottom-color: var(--csdn-primary);
+        }
+    }
+
+    /* 行内代码 */
+    code:not(pre code) {
+        background: var(--csdn-code-bg);
+        color: var(--csdn-primary);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        border: 1px solid var(--csdn-border);
+    }
+
+    /* 代码块 - CSDN 风格 */
+    pre {
+        background: #2d2d2d;
+        border-radius: var(--csdn-radius-lg);
+        padding: 16px 18px;
+        overflow-x: auto;
+        margin: 20px 0;
+        font-size: 13.5px;
+        line-height: 1.6;
+        border: 1px solid #3e3e3e;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+        code {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', Consolas, monospace;
+            white-space: pre;
+        }
+    }
+
+    /* 代码块语言标签 */
+    .highlight-wrapper, .code-block-wrapper {
+        position: relative;
+        border-radius: var(--csdn-radius-lg);
+        overflow: hidden;
+
+        .copyCodeButton {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.2);
+                color: #fff;
+            }
+
+            &.copied {
+                background: var(--csdn-primary);
+                color: #fff;
+                border-color: var(--csdn-primary);
+            }
+        }
+    }
+
+    /* 引用块 - CSDN 风格 */
+    blockquote {
+        border-left: 4px solid var(--csdn-primary);
+        background: var(--csdn-quote-bg);
+        padding: 14px 18px;
+        margin: 20px 0;
+        border-radius: 0 var(--csdn-radius) var(--csdn-radius) 0;
+        color: var(--csdn-text-secondary);
+        position: relative;
+
+        &::before {
+            content: '"';
+            position: absolute;
+            top: 4px;
+            left: 12px;
+            font-size: 32px;
+            color: var(--csdn-primary);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        p {
+            margin: 0;
+            padding-left: 20px;
+        }
+    }
+
+    /* 表格样式 */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 14px;
+        box-shadow: var(--csdn-shadow);
+        border-radius: var(--csdn-radius);
+        overflow: hidden;
+
+        th {
+            background: var(--csdn-meta-bg);
+            color: var(--csdn-text);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--csdn-border);
+        }
+
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--csdn-border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background: var(--csdn-meta-bg);
+        }
+
+        tr:hover td {
+            background: rgba(252, 85, 49, 0.03);
+        }
+    }
+
+    /* 图片样式 */
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--csdn-radius);
+        margin: 16px auto;
+        display: block;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* 分割线 */
+    hr {
+        border: none;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--csdn-border), transparent);
+        margin: 32px 0;
+    }
+
+    /* 强调文本 */
+    strong {
+        color: var(--csdn-primary);
+        font-weight: 600;
+    }
+
+    em {
+        color: var(--csdn-text-secondary);
+    }
+}
+
+/* ===== 文章元信息区域 ===== */
+.article-meta {
+    .article-time--published,
+    .article-time--reading {
+        color: var(--csdn-text-secondary);
+        font-size: 13px;
+    }
+
+    .article-category a {
+        background: var(--csdn-primary);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 14px;
+        font-size: 13px;
+        border: none;
+
+        &:hover {
+            background: var(--csdn-primary-hover);
+            color: #fff;
+        }
+    }
+}
+
+/* ===== 文章底部作者卡片 - CSDN 名片 ===== */
+.csdn-author-card {
+    background: linear-gradient(135deg, #fff5f3 0%, #ffe8e3 100%);
+    border: 1px solid #ffe0db;
+    border-radius: var(--csdn-radius-lg);
+    padding: 20px;
+    margin: 32px 0;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    .csdn-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid var(--csdn-primary);
+        flex-shrink: 0;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            margin: 0;
+            box-shadow: none;
+        }
+    }
+
+    .csdn-author-info {
+        flex: 1;
+        min-width: 0;
+
+        .csdn-author-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--csdn-text);
+            margin: 0 0 4px;
+        }
+
+        .csdn-author-desc {
+            font-size: 13px;
+            color: var(--csdn-text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+    }
+
+    .csdn-follow-btn {
+        flex-shrink: 0;
+        background: var(--csdn-primary);
+        color: #fff;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+            background: var(--csdn-primary-hover);
+        }
+    }
+}
+
+/* ===== Toast 操作按钮栏优化 ===== */
+.toast-action-bar {
+    max-width: 720px;
+    margin: 24px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--csdn-border);
+}
+
+.toast-action-btn {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 8px 18px;
+    border: 1px solid var(--csdn-border);
+    background: #fff;
+    color: var(--csdn-text);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background: var(--csdn-primary);
+        color: #fff;
+        border-color: var(--csdn-primary);
+        transform: translateY(-1px);
+    }
+}
+
+/* ===== 分类卡片保留 ===== */
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -37,7 +442,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(25, 118, 210, 0.1);
+        background: rgba(252, 85, 49, 0.1);
         border-radius: 10px;
     }
 
@@ -67,12 +472,24 @@
         height: 28px;
         padding: 0 8px;
         border-radius: 14px;
-        background: var(--accent-color);
+        background: var(--csdn-primary);
         color: #fff;
         font-size: 1.3rem;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+    .csdn-author-card {
+        flex-direction: column;
+        text-align: center;
+
+        .csdn-avatar {
+            margin: 0 auto;
+        }
     }
 }
