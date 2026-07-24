@@ -29,7 +29,7 @@ params:
   # ---------- 侧边栏信息（增强） ----------
   sidebar:
     subtitle: "探索 AI · 分享成长"
-    avatar: /img/avatar.jpg
+    avatar: /img/avatar.svg
 
   # ---------- 文章显示设置 ----------
   article:
